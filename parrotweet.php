@@ -1,4 +1,17 @@
 <?php
+/**
+ * ParroTweet: Merge multiple Twitter accounts into one broadcast stream
+ *
+ * @author Tim Cotten <tim@cotten.io>
+ * 
+ * Loads user-defined configuration file (config/parrotweet.json) containing
+ * account credentials for a subscriber and broadcaster. Two different accounts 
+ * are used so that a subscriber can directly subscribe to a target friend's 
+ * account and see otherwise blocked messages.
+ *
+ * Launches the app to sync up all friend accounts' latest messages, sorts them
+ * by timestamp, and then tweets them from the broadcast account.
+ */
 namespace ParroTweet;
 
 $base_path = dirname(__FILE__);

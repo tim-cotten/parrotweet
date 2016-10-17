@@ -1,4 +1,18 @@
 <?php
+/**
+ * ParroTweet\App
+ *
+ * @author Tim Cotten <tim@cotten.io>
+ * 
+ * Verify subscriber and broadcasted account credentials, sync up latest
+ * messages, sort them by timestamp, and tweet them from a single
+ * broadcast account.
+ * 
+ * Friends are listed by ID in the configuration file.
+ *
+ * Statuses (last known tweet) are stored in the file system in the status/
+ * folder.
+ */
 namespace ParroTweet;
 use Abraham\TwitterOAuth\TwitterOAuth;
 
@@ -13,7 +27,11 @@ class App
     private $_base_path;
     private $_ready = false;
     
-
+    /**
+     * App constructor
+     *
+     * @var array $config All configuration details (account credentials, timezone, friends)
+     */
     public function __construct($config)
     {
         $this->_connSubscriber = new TwitterOAuth($config['subscriber_key'], $config['subscriber_secret'], $config['subscriber_token'], $config['subscriber_token_secret']);
@@ -26,6 +44,12 @@ class App
                         count($this->_friends);
     }
 
+    /**
+     * Verify the provided account credentials
+     *
+     * @var int $connection_type Verify subscriber or broadcaster credentials
+     * @return bool
+     */
     public function verify($connection_type)
     {
         $response = null;
@@ -38,11 +62,18 @@ class App
         return (!empty($response) && !isset($response->errors));
     }
 
+    /**
+     * Check readiness - valid credentials and available friends (see constructor)
+     * @return bool
+     */
     public function isReady()
     {
         return $this->_ready;
     }
 
+    /**
+     * Fetch lates tweets, sort, and broadcast
+     */
     public function sync()
     {
         $parros = $this->_getLatest();
@@ -51,6 +82,10 @@ class App
         }
     }
 
+    /**
+     * Broadcast a Parro
+     * @var object Parro
+     */
     public function _broadcast($parro)
     {
         if (empty($parro)) {
@@ -69,6 +104,15 @@ class App
         }
     }
 
+    /**
+     * Fetch latest tweets (up to 200)
+     * 
+     * Sort by timestamps.
+     *
+     * Only fetches one tweet if the friend account has never been synced before.
+     *
+     * @return array
+     */
     private function _getLatest()
     {
         // Create a status folder if it doesn't exist
@@ -108,7 +152,7 @@ class App
                 continue;
             }
 
-
+            // Inset new Parros based on Tweets into list
             $tweets = (array)$content;
             foreach ($tweets as $t) {
                $dt = new \DateTime($t->created_at);
@@ -121,7 +165,7 @@ class App
             }
         }
 
-        ksort($parros);
+        ksort($parros); // sort by timestamp (key)
 
         return $parros;
     }

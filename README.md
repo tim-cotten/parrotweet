@@ -2,6 +2,7 @@
 ------------
 <p itemprop="description">Merge multiple Twitter accounts into one broadcast stream.</p>
 <p>Inspired by the work of Richard Vardit in defeating the censorship of the Kirchner presidency in Argentina.</p>
+<p>ParroTweet allows you to follow your friends with one account (which can see even blocked messages), while reposting all the content into a single stream on a separate account for journalistic or historical purposes. A similar technology was leveraged by @hosepink to mirror @CFKArgentina's account from 2014-2015. You can learn more about Richard Vardit's story in the Autumn 2016 edition of 2600.</p>
 <p><em>Version: 0.1.0 <strong>beta</strong></em></p>
 
 ## Examples

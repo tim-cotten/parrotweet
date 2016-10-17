@@ -1,0 +1,13 @@
+{
+	"timezone": "America/New_York",
+	"subscriber_key": "",
+	"subscriber_secret": "",
+	"subscriber_token": "",
+	"subscriber_token_secret": "",
+	"broadcaster_key": "",
+	"broadcaster_secret": "",
+	"broadcaster_token": "",
+	"broadcaster_token_secret": "",
+	"friends": [
+	]
+}

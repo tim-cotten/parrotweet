@@ -20,6 +20,7 @@ class App
 {
     const SUBSCRIBER =  0;
     const BROADCASTER = 1;
+    const BROADCAST_LIMIT = 25;
 
     private $_connSubscriber  = null;
     private $_connBroadcaster = null;
@@ -76,9 +77,15 @@ class App
      */
     public function sync()
     {
+        $broadcast = 0;
+
         $parros = $this->_getLatest();
         foreach ($parros as $p) {
             $this->_broadcast($p);
+            $broadcast += 1;
+            if ($broadcast >= self::BROADCAST_LIMIT) {
+               break;
+            }
         }
     }
 
@@ -97,6 +104,13 @@ class App
         
         try {
             $result = $this->_connBroadcaster->post('statuses/update', array('status' => $parro->text));
+            if (isset($result->errors)) {
+                print_r($result);
+                file_put_contents($path, (string)$parro->tweet_id);
+                return;
+            } else {
+                sleep(30);
+            }
             file_put_contents($path, (string)$parro->tweet_id);
             Logger::print("Published: [{$parro->friend_id}:{$parro->tweet_id}] {$parro->text}", 1);
         } catch (Exception $e) {
